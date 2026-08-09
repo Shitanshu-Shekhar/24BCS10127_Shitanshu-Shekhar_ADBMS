@@ -1,0 +1,21 @@
+WITH city_orders AS (
+    SELECT 
+        u.city,
+        COUNT(*) AS total_orders
+    FROM trades t
+    JOIN users u
+        ON t.user_id = u.user_id
+    WHERE t.status = 'Completed'
+    GROUP BY u.city
+),
+ranked AS (
+    SELECT 
+        city,
+        total_orders,
+        DENSE_RANK() OVER (ORDER BY total_orders DESC) AS rnk
+    FROM city_orders
+)
+SELECT city, total_orders
+FROM ranked
+WHERE rnk <= 3
+ORDER BY total_orders DESC;
