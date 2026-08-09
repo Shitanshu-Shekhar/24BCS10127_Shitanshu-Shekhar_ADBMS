@@ -1,0 +1,2 @@
+select *from Customer
+join Purchase on Customer.Customer_id = Purchase.Customer_id;
